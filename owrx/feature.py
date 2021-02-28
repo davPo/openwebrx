@@ -83,6 +83,8 @@ class FeatureDetector(object):
         "pocsag": ["digiham", "sox"],
         "js8call": ["js8", "sox"],
         "drm": ["dream", "sox"],
+        "gpsmic": ["gpsmic", "sox"],
+        "elt406": ["elt406", "sox"],
     }
 
     def feature_availability(self):
@@ -221,6 +223,18 @@ class FeatureDetector(object):
         ```
         """
         return self.command_is_runnable("perseustest -h")
+
+    def has_gpsmic(self):
+        """
+        Pryme MicGPS software decoder - F1URI.
+        """
+        return self.command_is_runnable("gpsmic -version")
+
+    def has_elt406(self):
+        """
+        ELT406 software decoder - F1URI.
+        """
+        return self.command_is_runnable("elt406 -version")
 
     def has_digiham(self):
         """

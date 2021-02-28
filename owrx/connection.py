@@ -417,6 +417,12 @@ class OpenWebRxReceiverClient(OpenWebRxClient, SdrSourceEventClient):
     def write_pocsag_data(self, data):
         self.send({"type": "pocsag_data", "value": data})
 
+    def write_gpsmic_data(self, data):
+        self.send({"type": "gpsmic_data", "value": data})
+            
+    def write_elt406_data(self, data):
+        self.send({"type": "elt406_data", "value": data})
+
     def write_backoff_message(self, reason):
         self.send({"type": "backoff", "reason": reason})
 

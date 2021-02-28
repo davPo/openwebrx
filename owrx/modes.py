@@ -109,6 +109,22 @@ class Modes(object):
             requirements=["pocsag"],
             squelch=False,
         ),
+        DigitalMode(
+            "gpsmic",
+            "GPSMic",
+            underlying=["nfm"],
+            bandpass=Bandpass(-6000, 6000),
+            requirements=["gpsmic"],
+            squelch=False,
+        ),
+        DigitalMode(
+            "elt406",
+            "ELT",
+            underlying=["nfm"],
+            bandpass=Bandpass(-6000, 6000),
+            requirements=["elt406"],
+            squelch=False,
+        ),
     ]
 
     @staticmethod

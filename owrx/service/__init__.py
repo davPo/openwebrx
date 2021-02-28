@@ -6,6 +6,8 @@ from csdr.csdr import dsp, output
 from owrx.wsjt import WsjtParser
 from owrx.aprs import AprsParser
 from owrx.js8 import Js8Parser
+from owrx.gpsmic import MicGPSParser
+from owrx.elt406 import Elt406Parser
 from owrx.config.core import CoreConfig
 from owrx.config import Config
 from owrx.source.resampler import Resampler

@@ -320,6 +320,17 @@ class dsp(object):
             if self.last_decimation != 1.0:
                 chain += ["csdr fractional_decimator_ff {last_decimation}"]
             return chain + ["fsk_demodulator -i", "pocsag_decoder"]
+        # F1URI
+        elif which == "gpsmic":
+            chain += ["csdr fmdemod_quadri_cf"]
+            if self.last_decimation != 1.0:
+                chain += ["csdr fractional_decimator_ff {last_decimation}"]
+            return chain + ["csdr convert_f_s32", "gpsmic -c {direwolf_config} -r {audio_rate} -t 0 -q d -q h 1>&2"]
+        elif which == "elt406": # TODO
+            chain += ["csdr fmdemod_quadri_cf"]
+            if self.last_decimation != 1.0:
+                chain += ["csdr fractional_decimator_ff {last_decimation}"]
+            return chain + ["csdr convert_f_s32", "elt406 -c {direwolf_config} -r {audio_rate} -t 0 -q d -q h 1>&2"]
 
     def set_secondary_demodulator(self, what):
         if self.get_secondary_demodulator() == what:
@@ -447,6 +458,10 @@ class dsp(object):
             self.output.send_output("packet_demod", kiss.read)
         elif self.isPocsag():
             self.output.send_output("pocsag_demod", self.secondary_process_demod.stdout.readline)
+        elif self.isGpsMic():
+            self.output.send_output("gpsmic_demod", self.secondary_process_demod.stdout.readline)
+        elif self.isElt406():
+            self.output.send_output("elt406_demod", self.secondary_process_demod.stdout.readline)
         else:
             self.output.send_output("secondary_demod", partial(self.secondary_process_demod.stdout.read, 1))
 
@@ -563,7 +578,7 @@ class dsp(object):
         return self.hd_output_rate
 
     def get_audio_rate(self):
-        if self.isDigitalVoice() or self.isPacket() or self.isPocsag() or self.isDrm():
+        if self.isDigitalVoice() or self.isPacket() or self.isPocsag() or self.isDrm() or self.isGpsMic or self.isElt406:
             return 48000
         elif self.isWsjtMode() or self.isJs8():
             return 12000
@@ -597,6 +612,16 @@ class dsp(object):
         if demodulator is None:
             demodulator = self.get_secondary_demodulator()
         return demodulator == "pocsag"
+
+    def isGpsMic(self, demodulator=None):
+        if demodulator is None:
+            demodulator = self.get_secondary_demodulator()
+        return demodulator == "elt406"
+
+    def isElt406(self, demodulator=None):
+        if demodulator is None:
+            demodulator = self.get_secondary_demodulator()
+        return demodulator == "gpsmic"
 
     def isFreeDV(self, demodulator=None):
         if demodulator is None:
@@ -693,7 +718,7 @@ class dsp(object):
         # no squelch required on digital voice modes
         actual_squelch = (
             -150
-            if self.isDigitalVoice() or self.isPacket() or self.isPocsag() or self.isFreeDV()
+            if self.isDigitalVoice() or self.isPacket() or self.isPocsag() or self.isFreeDV() or self.isGpsMic() or self.isElt406()
             else self.squelch_level
         )
         if self.running:

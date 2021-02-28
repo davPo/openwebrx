@@ -3,6 +3,8 @@ from owrx.wsjt import WsjtParser
 from owrx.js8 import Js8Parser
 from owrx.aprs import AprsParser
 from owrx.pocsag import PocsagParser
+from owrx.gpsmic import MicGPSParser
+from owrx.elt406 import Elt406Parser
 from owrx.source import SdrSourceEventClient, SdrSourceState, SdrBusyState, SdrClientClass
 from owrx.property import PropertyStack, PropertyLayer, PropertyValidator
 from owrx.property.validators import OrValidator, RegexValidator, BoolValidator
@@ -36,6 +38,8 @@ class DspManager(csdr.output, SdrSourceEventClient):
             "packet_demod": AprsParser(self.handler),
             "pocsag_demod": PocsagParser(self.handler),
             "js8_demod": Js8Parser(self.handler),
+            "micgps_demod": MicGPSParser(self.handler),
+            "elt406_demod": Elt406Parser(self.handler),
         }
 
         self.props = PropertyStack()
