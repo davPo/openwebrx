@@ -846,6 +846,12 @@ function on_ws_recv(evt) {
                     case 'pocsag_data':
                         $('#openwebrx-panel-pocsag-message').pocsagMessagePanel().pushMessage(json['value']);
                         break;
+                    case 'gpsmic_data':
+                            $('#openwebrx-panel-gpsmic-message').gpsmicMessagePanel().pushMessage(json['value']);
+                        break;
+                    case 'elt_data':
+                            $('#openwebrx-panel-elt-message').eltMessagePanel().pushMessage(json['value']);
+                        break;
                     case 'backoff':
                         divlog("Server is currently busy: " + json['reason'], true);
                         var $overlay = $('#openwebrx-error-overlay');
@@ -1426,10 +1432,12 @@ function secondary_demod_init() {
     $('#openwebrx-panel-wsjt-message').wsjtMessagePanel();
     $('#openwebrx-panel-packet-message').packetMessagePanel();
     $('#openwebrx-panel-pocsag-message').pocsagMessagePanel();
+  //  $('#openwebrx-panel-elt-message').eltMessagePanel();
+    $('#openwebrx-panel-gpsmic-message').gpsmicMessagePanel();
     $('#openwebrx-panel-js8-message').js8();
 }
 
-function secondary_demod_push_data(x) {
+function  secondary_demod_push_data(x) {
     x = Array.from(x).filter(function (y) {
         var c = y.charCodeAt(0);
         return (c === 10 || (c >= 32 && c <= 126));

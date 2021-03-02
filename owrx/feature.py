@@ -83,7 +83,7 @@ class FeatureDetector(object):
         "pocsag": ["digiham", "sox"],
         "js8call": ["js8", "sox"],
         "drm": ["dream", "sox"],
-        "gpsmic": ["gpsmic", "sox"],
+        "gpsmic": ["gpsmic", "sox"], 
         "elt406": ["elt406", "sox"],
     }
 
@@ -228,7 +228,7 @@ class FeatureDetector(object):
         """
         Pryme MicGPS software decoder - F1URI.
         """
-        return self.command_is_runnable("gpsmic -version")
+        return self.command_is_runnable("gpsmic_demod -version") # bash command line
 
     def has_elt406(self):
         """

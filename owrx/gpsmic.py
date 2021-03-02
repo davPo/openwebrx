@@ -50,26 +50,33 @@ class AprsLocation(LatLngLocation):
 class MicGPSParser(Parser):
     def __init__(self, handler):
         super().__init__(handler)
-        self.ax25parser = Ax25Parser()
-        self.deframer = KissDeframer()
+    #    self.ax25parser = Ax25Parser()
+    #    self.deframer = KissDeframer()
 
     def setDialFrequency(self, freq):
         super().setDialFrequency(freq)
 
     def parse(self, raw):
-        for frame in self.deframer.parse(raw):
-            try:
-                data = self.ax25parser.parse(frame)
+        try:
+            aprsData = {"source": "ab", "destination": "cd", "path": "ef", "lat": 46.3, "lon": 6.06, "timestamp":538457395}
+            self.handler.write_gpsmic_data(aprsData)
+            logger.debug("decoded APRS data: %s", aprsData)
+        except Exception:
+            logger.exception("exception while parsing gpsmic data")
 
-                # TODO how can we tell if this is an APRS frame at all?
-                aprsData = self.parseAprsData(data)
+        # for frame in self.deframer.parse(raw):
+        #     try:
+        #         data = self.ax25parser.parse(frame)
 
-                logger.debug("decoded APRS data: %s", aprsData)
-                self.updateMap(aprsData)
+        #         # TODO how can we tell if this is an APRS frame at all?
+        #         aprsData = self.parseAprsData(data)
+
+        #         logger.debug("decoded APRS data: %s", aprsData)
+        #         self.updateMap(aprsData)
                
-                self.handler.write_aprs_data(aprsData)
-            except Exception:
-                logger.exception("exception while parsing aprs data")
+        #         self.handler.write_gpsmic_data(aprsData)
+        #     except Exception:
+        #         logger.exception("exception while parsing gpsmic data")
 
     def updateMap(self, mapData):
         if "type" in mapData and mapData["type"] == "thirdparty" and "data" in mapData:

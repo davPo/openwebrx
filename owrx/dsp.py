@@ -38,7 +38,7 @@ class DspManager(csdr.output, SdrSourceEventClient):
             "packet_demod": AprsParser(self.handler),
             "pocsag_demod": PocsagParser(self.handler),
             "js8_demod": Js8Parser(self.handler),
-            "micgps_demod": MicGPSParser(self.handler),
+            "gpsmic_demod": MicGPSParser(self.handler),
             "elt406_demod": Elt406Parser(self.handler),
         }
 

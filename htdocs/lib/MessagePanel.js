@@ -112,6 +112,7 @@ $.fn.wsjtMessagePanel = function(){
     return this.data('panel');
 };
 
+// packet start
 function PacketMessagePanel(el) {
     MessagePanel.call(this, el);
     this.initClearTimer();
@@ -209,6 +210,7 @@ $.fn.packetMessagePanel = function() {
     return this.data('panel');
 };
 
+// packet end
 PocsagMessagePanel = function(el) {
     MessagePanel.call(this, el);
     this.initClearTimer();
@@ -242,6 +244,204 @@ PocsagMessagePanel.prototype.pushMessage = function(msg) {
 $.fn.pocsagMessagePanel = function() {
     if (!this.data('panel')) {
         this.data('panel', new PocsagMessagePanel(this));
+    };
+    return this.data('panel');
+};
+
+// end pocsag
+
+function GpsMicMessagePanel(el) {
+    MessagePanel.call(this, el);
+    this.initClearTimer();
+}
+
+GpsMicMessagePanel.prototype = new MessagePanel();
+
+GpsMicMessagePanel.prototype.render = function() {
+    $(this.el).append($(
+        '<table>' +
+            '<thead><tr>' +
+                '<th>UTC</th>' +
+                '<th class="callsign">Callsign</th>' +
+                '<th class="coord">Coord</th>' +
+                '<th class="message">Comment</th>' +
+            '</tr></thead>' +
+            '<tbody></tbody>' +
+        '</table>'
+    ));
+};
+
+GpsMicMessagePanel.prototype.pushMessage = function(msg) {
+    var $b = $(this.el).find('tbody');
+    var pad = function (i) {
+        return ('' + i).padStart(2, "0");
+    };
+
+    if (msg.type && msg.type === 'thirdparty' && msg.data) {
+        msg = msg.data;
+    }
+    var source = msg.source;
+    if (msg.type) {
+        if (msg.type === 'item') {
+            source = msg.item;
+        }
+        if (msg.type === 'object') {
+            source = msg.object;
+        }
+    }
+
+    var timestamp = '';
+    if (msg.timestamp) {
+        var t = new Date(msg.timestamp);
+        timestamp = pad(t.getUTCHours()) + pad(t.getUTCMinutes()) + pad(t.getUTCSeconds())
+    }
+
+    var link = '';
+    var classes = [];
+    var styles = {};
+    var overlay = '';
+    var stylesToString = function (s) {
+        return $.map(s, function (value, key) {
+            return key + ':' + value + ';'
+        }).join('')
+    };
+    if (msg.symbol) {
+        classes.push('aprs-symbol');
+        classes.push('aprs-symboltable-' + (msg.symbol.table === '/' ? 'normal' : 'alternate'));
+        styles['background-position-x'] = -(msg.symbol.index % 16) * 15 + 'px';
+        styles['background-position-y'] = -Math.floor(msg.symbol.index / 16) * 15 + 'px';
+        if (msg.symbol.table !== '/' && msg.symbol.table !== '\\') {
+            var s = {};
+            s['background-position-x'] = -(msg.symbol.tableindex % 16) * 15 + 'px';
+            s['background-position-y'] = -Math.floor(msg.symbol.tableindex / 16) * 15 + 'px';
+            overlay = '<div class="aprs-symbol aprs-symboltable-overlay" style="' + stylesToString(s) + '"></div>';
+        }
+    } else if (msg.lat && msg.lon) {
+        classes.push('openwebrx-maps-pin');
+    }
+    var attrs = [
+        'class="' + classes.join(' ') + '"',
+        'style="' + stylesToString(styles) + '"'
+    ].join(' ');
+    if (msg.lat && msg.lon) {
+        link = '<a ' + attrs + ' href="map?callsign=' + encodeURIComponent(source) + '" target="openwebrx-map">' + overlay + '</a>';
+    } else {
+        link = '<div ' + attrs + '>' + overlay + '</div>'
+    }
+
+    $b.append($(
+        '<tr>' +
+        '<td>' + timestamp + '</td>' +
+        '<td class="callsign">' + source + '</td>' +
+        '<td class="coord">' + link + '</td>' +
+        '<td class="message">' + (msg.comment || msg.message || '') + '</td>' +
+        '</tr>'
+    ));
+    $b.scrollTop($b[0].scrollHeight);
+};
+
+$.fn.gpsmicMessagePanel = function() {
+    if (!this.data('panel')) {
+        this.data('panel', new GpsMicMessagePanel(this));
+    };
+    return this.data('panel');
+};
+
+// ELT
+
+function EltMessagePanel(el) {
+    MessagePanel.call(this, el);
+    this.initClearTimer();
+}
+
+EltMessagePanel.prototype = new MessagePanel();
+
+EltMessagePanel.prototype.render = function() {
+    $(this.el).append($(
+        '<table>' +
+            '<thead><tr>' +
+                '<th>UTC</th>' +
+                '<th class="callsign">Callsign</th>' +
+                '<th class="coord">Coord</th>' +
+                '<th class="message">Comment</th>' +
+            '</tr></thead>' +
+            '<tbody></tbody>' +
+        '</table>'
+    ));
+};
+
+EltMessagePanel.prototype.pushMessage = function(msg) {
+    var $b = $(this.el).find('tbody');
+    var pad = function (i) {
+        return ('' + i).padStart(2, "0");
+    };
+
+    if (msg.type && msg.type === 'thirdparty' && msg.data) {
+        msg = msg.data;
+    }
+    var source = msg.source;
+    if (msg.type) {
+        if (msg.type === 'item') {
+            source = msg.item;
+        }
+        if (msg.type === 'object') {
+            source = msg.object;
+        }
+    }
+
+    var timestamp = '';
+    if (msg.timestamp) {
+        var t = new Date(msg.timestamp);
+        timestamp = pad(t.getUTCHours()) + pad(t.getUTCMinutes()) + pad(t.getUTCSeconds())
+    }
+
+    var link = '';
+    var classes = [];
+    var styles = {};
+    var overlay = '';
+    var stylesToString = function (s) {
+        return $.map(s, function (value, key) {
+            return key + ':' + value + ';'
+        }).join('')
+    };
+    if (msg.symbol) {
+        classes.push('aprs-symbol');
+        classes.push('aprs-symboltable-' + (msg.symbol.table === '/' ? 'normal' : 'alternate'));
+        styles['background-position-x'] = -(msg.symbol.index % 16) * 15 + 'px';
+        styles['background-position-y'] = -Math.floor(msg.symbol.index / 16) * 15 + 'px';
+        if (msg.symbol.table !== '/' && msg.symbol.table !== '\\') {
+            var s = {};
+            s['background-position-x'] = -(msg.symbol.tableindex % 16) * 15 + 'px';
+            s['background-position-y'] = -Math.floor(msg.symbol.tableindex / 16) * 15 + 'px';
+            overlay = '<div class="aprs-symbol aprs-symboltable-overlay" style="' + stylesToString(s) + '"></div>';
+        }
+    } else if (msg.lat && msg.lon) {
+        classes.push('openwebrx-maps-pin');
+    }
+    var attrs = [
+        'class="' + classes.join(' ') + '"',
+        'style="' + stylesToString(styles) + '"'
+    ].join(' ');
+    if (msg.lat && msg.lon) {
+        link = '<a ' + attrs + ' href="map?callsign=' + encodeURIComponent(source) + '" target="openwebrx-map">' + overlay + '</a>';
+    } else {
+        link = '<div ' + attrs + '>' + overlay + '</div>'
+    }
+
+    $b.append($(
+        '<tr>' +
+        '<td>' + timestamp + '</td>' +
+        '<td class="callsign">' + source + '</td>' +
+        '<td class="coord">' + link + '</td>' +
+        '<td class="message">' + (msg.comment || msg.message || '') + '</td>' +
+        '</tr>'
+    ));
+    $b.scrollTop($b[0].scrollHeight);
+};
+
+$.fn.eltMessagePanel = function() {
+    if (!this.data('panel')) {
+        this.data('panel', new EltMessagePanel(this));
     };
     return this.data('panel');
 };

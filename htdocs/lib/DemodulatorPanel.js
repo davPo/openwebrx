@@ -162,6 +162,8 @@ DemodulatorPanel.prototype.updatePanels = function() {
     toggle_panel("openwebrx-panel-js8-message", modulation == "js8");
     toggle_panel("openwebrx-panel-packet-message", modulation === "packet");
     toggle_panel("openwebrx-panel-pocsag-message", modulation === "pocsag");
+    toggle_panel("openwebrx-panel-gpsmic-message", modulation === "gpsmic");
+    toggle_panel("openwebrx-panel-elt-message", modulation === "elt406");
 
     modulation = this.getDemodulator().get_modulation();
     var showing = 'openwebrx-panel-metadata-' + modulation;

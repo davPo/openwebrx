@@ -1155,6 +1155,24 @@ img.openwebrx-mirror-img
     white-space: pre;
 }
 
+#openwebrx-panel-gpsmic-message .callsign {
+    width: 80px;
+}
+
+#openwebrx-panel-gpsmic-message .coord {
+    width: 40px;
+    text-align: center;
+}
+
+#openwebrx-panel-elt-message .callsign {
+    width: 80px;
+}
+
+#openwebrx-panel-elt-message .coord {
+    width: 40px;
+    text-align: center;
+}
+
 .aprs-symbol {
     display: inline-block;
     width: 15px;
@@ -1237,6 +1255,8 @@ img.openwebrx-mirror-img
 #openwebrx-panel-digimodes[data-mode="ft4"]    #openwebrx-digimode-content-container,
 #openwebrx-panel-digimodes[data-mode="packet"] #openwebrx-digimode-content-container,
 #openwebrx-panel-digimodes[data-mode="pocsag"] #openwebrx-digimode-content-container,
+#openwebrx-panel-digimodes[data-mode="gpsmic"] #openwebrx-digimode-content-container,
+#openwebrx-panel-digimodes[data-mode="elt"] #openwebrx-digimode-content-container,
 #openwebrx-panel-digimodes[data-mode="js8"]    #openwebrx-digimode-content-container,
 #openwebrx-panel-digimodes[data-mode="fst4"]   #openwebrx-digimode-content-container,
 #openwebrx-panel-digimodes[data-mode="fst4w"]  #openwebrx-digimode-content-container,
@@ -1248,6 +1268,8 @@ img.openwebrx-mirror-img
 #openwebrx-panel-digimodes[data-mode="ft4"]    #openwebrx-digimode-select-channel,
 #openwebrx-panel-digimodes[data-mode="packet"] #openwebrx-digimode-select-channel,
 #openwebrx-panel-digimodes[data-mode="pocsag"] #openwebrx-digimode-select-channel,
+#openwebrx-panel-digimodes[data-mode="gpsmic"] #openwebrx-digimode-select-channel,
+#openwebrx-panel-digimodes[data-mode="elt"] #openwebrx-digimode-select-channel,
 #openwebrx-panel-digimodes[data-mode="js8"]    #openwebrx-digimode-select-channel,
 #openwebrx-panel-digimodes[data-mode="fst4"]   #openwebrx-digimode-select-channel,
 #openwebrx-panel-digimodes[data-mode="fst4w"]  #openwebrx-digimode-select-channel,
@@ -1263,6 +1285,8 @@ img.openwebrx-mirror-img
 #openwebrx-panel-digimodes[data-mode="ft4"]    #openwebrx-digimode-canvas-container,
 #openwebrx-panel-digimodes[data-mode="packet"] #openwebrx-digimode-canvas-container,
 #openwebrx-panel-digimodes[data-mode="pocsag"] #openwebrx-digimode-canvas-container,
+#openwebrx-panel-digimodes[data-mode="gpsmic"] #openwebrx-digimode-canvas-container,
+#openwebrx-panel-digimodes[data-mode="elt"] #openwebrx-digimode-canvas-container,
 #openwebrx-panel-digimodes[data-mode="js8"]    #openwebrx-digimode-canvas-container,
 #openwebrx-panel-digimodes[data-mode="fst4"]   #openwebrx-digimode-canvas-container,
 #openwebrx-panel-digimodes[data-mode="fst4w"]  #openwebrx-digimode-canvas-container,
