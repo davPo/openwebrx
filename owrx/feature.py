@@ -228,7 +228,7 @@ class FeatureDetector(object):
         """
         Pryme MicGPS software decoder - F1URI.
         """
-        return self.command_is_runnable("gpsmic_demod -version") # bash command line
+        return self.command_is_runnable("gpsmic_decoder -version") # bash command line
 
     def has_elt406(self):
         """

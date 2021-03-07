@@ -320,30 +320,15 @@ class dsp(object):
             if self.last_decimation != 1.0:
                 chain += ["csdr fractional_decimator_ff {last_decimation}"]
             return chain + ["fsk_demodulator -i", "pocsag_decoder"]
-        # F1URI mods
-    #  #   rtl_sdr -s 2400000 -f 145000000 -g 20 - | csdr convert_u8_f | csdr shift_addition_cc `python -c "print float(145000000-145350000)/2400000"` | csdr fir_decimate_cc 50 0.005 HAMMING | csdr fmdemod_quadri_cf | csdr limit_ff | csdr deemphasis_nfm_ff 48000 | csdr fastagc_ff | csdr convert_f_s16 | mplayer -cache 1024 -quiet -rawaudio samplesize=2:channels=1:rate=48000 -demuxer rawaudio -
-        
-    #               chain += ["csdr fmdemod_quadri_cf", "csdr limit_ff"]
-    #         chain += last_decimation_block
-    #         chain += [
-    #             "csdr deemphasis_nfm_ff {audio_rate}",
-    #             "csdr agc_ff --profile slow --max 3",
-    #         ]
-    #         if self.get_audio_rate() != self.get_output_rate():
-    #             chain += [
-    #                 "sox -t raw -r {audio_rate} -e floating-point -b 32 -c 1 --buffer 32 - -t raw -r {output_rate} -e signed-integer -b 16 -c 1 - "
-    #             ]
 
         elif which == "gpsmic":
             chain += ["csdr fmdemod_quadri_cf"]
             if self.last_decimation != 1.0:
-                chain += ["csdr fractional_decimator_ff {last_decimation}"]
-                chain += ["sox -t raw -r {audio_rate} -e floating-point -b 32 -c 1  -t raw -r 48000 -e signed-integer -b 32 -c 1  -L - "
-                ]
-                chain += ["gpsmic_demod -s65535 -d3 > rawdata.bin"
-                ] 
-            return chain
-        
+                chain += ["csdr fractional_decimator_ff {last_decimation}"] # 2.4 Msps -> 48000 should be 5
+                chain += ["csdr convert_f_s16"] # float to signed int 16
+                chain += ["sox -t raw -r {audio_rate} -e signed-integer -b 16 -c 1 - -t raw -r 48000 -e signed-integer -b 32 -c 1  -L - "]
+            return chain  + ["cmx882_decoder -s65535 -d1", "gpsmic_decoder -o4"]
+
         elif which == "elt406": # TODO
             chain += ["csdr fmdemod_quadri_cf"]
             if self.last_decimation != 1.0:
